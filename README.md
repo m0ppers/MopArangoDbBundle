@@ -29,33 +29,34 @@ https://github.com/triAGENS/AvocadoDB-PHP
 ### Connections
 in app/config/config.yml:
 
-`
+```
 mop_avocado:
     default_connection: main # optional will be set to the first connection if not present
     connections:
         main: 
             host: 127.0.0.1
             port: 8529
-`
+```
 Should be pretty obvious. Once configured the Bundle handles the lazy loading of the connections.
 
 
 You can now access your avocado connections using the DI-Container of sf2:
-`
+```
 $connection = $container->get('mop_avocado.default_connection');
 
 or
 
 $connection = $container->get('mop_avocado.connections.main');
-`
+```
 
 ### FOS Userbundle integration
 
-`mop_avocado:
+```
+mop_avocado:
     fos:
         connection: main
         collection: users
-`
+```
 Afterwards create the collection by issueing
 
 php app/console avocado:create-collection users
@@ -66,6 +67,7 @@ and proceed with the normal userbundle configuration
 
 Currently there are two helper commands available through the symfony console:
 
-`avocado:create-collection
+```
+avocado:create-collection
 avocado:drop-collection
-`
+```
