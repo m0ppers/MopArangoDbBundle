@@ -1,8 +1,8 @@
 <?php
-namespace Mop\AvocadoBundle\Connection;
+namespace Mop\ArangoDbBundle\Connection;
 
-use Mop\AvocadoBundle\LoggerInterface;
-use triagens\Avocado\Connection;
+use Mop\ArangoDbBundle\LoggerInterface;
+use triagens\ArangoDb\Connection;
 
 class Factory
 {

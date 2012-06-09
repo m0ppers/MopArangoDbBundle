@@ -1,15 +1,15 @@
 <?php
-namespace Mop\AvocadoBundle\FOSUser\Model;
+namespace Mop\ArangoDbBundle\FOSUser\Model;
 
 use FOS\UserBundle\Model\UserManager as BaseUserManager;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Validator\Constraint;
-use triagens\Avocado\Connection;
-use triagens\Avocado\DocumentHandler;
-use triagens\Avocado\Document;
+use triagens\ArangoDb\Connection;
+use triagens\ArangoDb\DocumentHandler;
+use triagens\ArangoDb\Document;
 use FOS\UserBundle\Util\CanonicalizerInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Mop\AvocadoBundle\FOSUser\User;
+use Mop\ArangoDbBundle\FOSUser\User;
 
 class UserManager extends BaseUserManager
 {

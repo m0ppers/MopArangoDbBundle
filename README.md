@@ -30,7 +30,7 @@ https://github.com/triAGENS/AvocadoDB-PHP
 in app/config/config.yml:
 
 ```
-mop_avocado:
+mop_arango_db:
     default_connection: main # optional will be set to the first connection if not present
     connections:
         main: 
@@ -42,26 +42,22 @@ Should be pretty obvious. Once configured the Bundle handles the lazy loading of
 
 You can now access your avocado connections using the DI-Container of sf2:
 ```
-$connection = $container->get('mop_avocado.default_connection');
+$connection = $container->get('mop_arangodb.default_connection');
 
 or
 
-$connection = $container->get('mop_avocado.connections.main');
+$connection = $container->get('mop_arangodb.connections.main');
 ```
 
 ### FOS Userbundle integration
 
 ```
-mop_avocado:
+mop_arangodb:
     fos:
         connection: main
         collection: users
 ```
-Afterwards create the collection by issueing
-
-php app/console avocado:create-collection users
-
-and proceed with the normal userbundle configuration
+Afterwards create the collection in arangodb
 
 ## Avocado Helper Commands
 

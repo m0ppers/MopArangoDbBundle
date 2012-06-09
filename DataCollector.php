@@ -1,5 +1,5 @@
 <?php
-namespace Mop\AvocadoBundle;
+namespace Mop\ArangoDbBundle;
 
 use Symfony\Component\HttpKernel\DataCollector\DataCollector as BaseDataCollector;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +52,7 @@ class DataCollector extends BaseDataCollector implements LoggerInterface
      */
     public function getName()
     {
-        return 'avocado';
+        return 'arangodb';
     }
     
     public function getInteractions()

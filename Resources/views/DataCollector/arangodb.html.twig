@@ -1,0 +1,51 @@
+{% extends app.request.isXmlHttpRequest ? 'WebProfilerBundle:Profiler:ajax_layout.html.twig' : 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+    {% set icon %}
+        <img width="43" height="28" alt="ArangoDb" style="border-width: 0; vertical-align: middle; margin-right: 5px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAcCAQAAABSK45eAAAAAXNSR0IArs4c6QAAAAJiS0dEAP+Hj8y/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAEbklEQVRIx53Wf4hcVxUH8M+9783sbN3sbiJJU9IIohZFUyGuf2hrQ1toa6oVUyoqRcEgYv7xV8GilYrofwUVWyoW1NSiVE0lkUJLyR+traJosaa0tpo0pCHF/Npssk52Z9671z/mZky0pNH3mDvMvHPP/Z7v+Z5zXvAa1/3hE/m7d8YPLMz1BXRcYu8Xrpy66Zvn2xVey+1dN53e2c8xjEyzgFbOE6HzxTu+vdu1/4/bXz38h81REEUBQZJGjoUsrPvktvtfbV88n9OHr/nj5kqlq6ujc85ay4GD22//GDv+N7S3/6OzplaJKqEgSLIkaWQDQchvDFvDDjdfONqwZmRSq9Rqtc747oo6ghz2+WG+2fdeHe3jNuH3bz00+09JMmP+d0/nXpgwYULHCDVZq5UMJa2BBsFKt52DOMAjbrDj8uqBgxu6eqJVsnnZSYedFHVN6ZoU1cgajVajMTSUBLzJxfGSvLG4rbnPDR7MJ9L74nWSRhQRBJVon2ccd1Df0ISeSlAJsqiStDKyv5t5YeNlY7QPuNW9+SqXipKgkksYQdQiqQ39xkuOqk3qqJAMDQvekZpznrn1yz8dk3Bfvt60KEqiJfsddsIaq73BpAZRK4iOe9QhjZ6uWMhoDLUF/TDPbb3lRxC+/5W3f2uDgFrjO5ZNqXR11Gi931qphJZEQ7v8VdTVRZIMxs+j4Bvht94rbM8fsVRq6A6v09PVU48Er9JobDGjlVQaUTZvh/16JsWiDKJGJXinWwJx0kAURXsEUVCLolrUFVU6funxkqhKK5n2Ke/RN++0Ri5FXWtlf8q7tj0kThbCo8d0ygFRRfkerS96ULcgHkV2vY9aNm9JO9ZqJavDK/dsEXuCLKvsLY/zuEZGOEa/j9mpHv+b8TabLFq0LMtCkVqyz2Nfiv3SmYhSqfhGlrWSVlt6QPaMo+NaDxKu9m4nC94sCMXPbrEtptk66Zx7JKCkkbQawf6i6TO6aK02MChozxwYXXxXnC2mrau1pSQbgyL2pkh+VP9rz2p4lRqvN5Sls6gZxRmrl0cUJHMWtAZaA0ONJcuWDSwbGhh4h0sL2wqLI/dVqchc6AxWiH++OwqSrOvrTsqWDAzKOtBaNrBgsw9rSnpHiWy19hY5njkkIyV3hhemjyxsKKdVTtnugBVqUUeLxrRrXFZ6RZLlEvbQcXfrm9FTF36DYZr6wdc+G/jxPR/aFkviosqCI14RBGtdZNZU0YOCNJVPP+8Ki/r66jE1Gx3b9JknCDy/+tnDN2qE0myipCpmIz2GkvdKLngrz+dnw/rLr9vznxPlKVeMhs5zR9qZXzgllHpp0ZYZoGgyjfmk61De6S+f3hrSnv8eVFf8ezr8xFtW/u2R6bm5uKq4DmdV3JnwK7WXvWjB4Y9/7mfnfxEo+5+20aO3Hfv8YN36vD6sNDtu5pxwyrxjTlt8bvHeNx+4dtevfdAFuYUnXYmHvnogTb2r3nJRiPLuoy/N71th1qq9N/4cnnCVC7n+Bf8L7Ybv4F61AAAAAElFTkSuQmCC"/>
+        <span class="sf-toolbar-status">{{ collector.interactionscount }}</span>
+    {% endset %}
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>DB Requests</b>
+            <span>{{ collector.interactionscount }}</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>Request time</b>
+            <span>{{ '%0.2f'|format(collector.totaltime) }} ms</span>
+        </div>
+    {% endset %}
+    {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
+{% endblock %}
+
+{% block menu %}
+<span class="label">
+    <span class="icon"><img src="{{ asset('bundles/moparangodb/images/profiler/arangodb.png') }}" alt="" /></span>
+    <strong>ArangoDb</strong>
+    <span class="count">
+        <span>{{ collector.interactionscount }}</span>
+        <span>{{ '%0.0f'|format(collector.totaltime) }} ms</span>
+    </span>
+</span>
+{% endblock %}
+
+{% block panel %}
+    {% if collector.interactions is empty %}
+        <p>
+            <em>No queries.</em>
+        </p>
+    {% else %}
+        <ul class="alt">
+        {% for i, interaction in collector.interactions %}
+            <li class="{{ cycle(['odd', 'even'], i) }}">
+                <div>
+                    <div>Connection: {{ interaction.connection }}</div>
+                    <code>{{ interaction.requestMethod }} {{ interaction.uri }}: {{ interaction.data}}</code>
+                    <hr/>
+                    <code>HTTP-Result: {{ interaction.code }}, Length: {{ interaction.responseLength }}</code>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

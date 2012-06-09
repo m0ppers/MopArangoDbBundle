@@ -5,16 +5,16 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="mop_avocado.fos.user_manager.class">Mop\AvocadoBundle\FOSUser\Model\UserManager</parameter>
+        <parameter key="mop_arangodb.fos.user_manager.class">Mop\ArangoDbBundle\FOSUser\Model\UserManager</parameter>
     </parameters>
 
     <services>
-        <service id="mop_avocado.fos.user_manager" class="%mop_avocado.fos.user_manager.class%" public="false">
+        <service id="mop_arangodb.fos.user_manager" class="%mop_arangodb.fos.user_manager.class%" public="false">
             <argument type="service" id="security.encoder_factory" />
             <argument type="service" id="fos_user.util.username_canonicalizer" />
             <argument type="service" id="fos_user.util.email_canonicalizer" />
-            <argument type="service" id="mop_avocado.fos.connection"/>
-            <argument>%mop_avocado.fos.collection%</argument>
+            <argument type="service" id="mop_arangodb.fos.connection"/>
+            <argument>%mop_arangodb.fos.collection%</argument>
             <argument>%fos_user.model.user.class%</argument>
         </service>
     </services>

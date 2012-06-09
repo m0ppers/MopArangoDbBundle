@@ -1,5 +1,5 @@
 <?php
-namespace Mop\AvocadoBundle;
+namespace Mop\ArangoDbBundle;
 
 interface LoggerInterface
 {

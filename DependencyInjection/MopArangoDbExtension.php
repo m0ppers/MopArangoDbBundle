@@ -1,6 +1,6 @@
 <?php
 
-namespace Mop\AvocadoBundle\DependencyInjection;
+namespace Mop\ArangoDbBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class MopAvocadoExtension extends Extension
+class MopArangoDbExtension extends Extension
 {
     /**
      * {@inheritDoc}
@@ -37,21 +37,21 @@ class MopAvocadoExtension extends Extension
             foreach ($config['connections'] as $name => $connection) {
                 $arguments = array_merge(array($name), array_values($connection));
                 
-                $logger = new Reference('mop_avocado.data_collector');
+                $logger = new Reference('mop_arangodb.data_collector');
                 if (true === $container->getParameter('kernel.debug')) {
-                    $container->getDefinition('mop_avocado.connection_factory')->addMethodCall('addLogger', array($logger));
+                    $container->getDefinition('mop_arangodb.connection_factory')->addMethodCall('addLogger', array($logger));
                 }
                 $container
-                    ->setDefinition('mop_avocado.connections.'.$name, new DefinitionDecorator('mop_avocado.connection'))
+                    ->setDefinition('mop_arangodb.connections.'.$name, new DefinitionDecorator('mop_arangodb.connection'))
                     ->setArguments($arguments);
             }
         }
 
 
-        $container->setAlias('mop_avocado.default_connection', 'mop_avocado.connections.'.$config['default_connection']);
+        $container->setAlias('mop_arangodb.default_connection', 'mop_arangodb.connections.'.$config['default_connection']);
         if (isset($config['fos'])) {
-            $container->setParameter('mop_avocado.fos.collection', $config['fos']['collection']);
-            $container->setAlias('mop_avocado.fos.connection', 'mop_avocado.connections.'.$config['fos']['connection']);
+            $container->setParameter('mop_arangodb.fos.collection', $config['fos']['collection']);
+            $container->setAlias('mop_arangodb.fos.connection', 'mop_arangodb.connections.'.$config['fos']['connection']);
 
             $loader->load('fos.xml');
         }

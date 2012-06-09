@@ -5,12 +5,12 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="mop_avocado.connection_factory.class">Mop\AvocadoBundle\Connection\Factory</parameter>
+        <parameter key="mop_arangodb.connection_factory.class">Mop\ArangoDbBundle\Connection\Factory</parameter>
     </parameters>
 
     <services>
-        <service id="mop_avocado.connection_factory" class="%mop_avocado.connection_factory.class%">
+        <service id="mop_arangodb.connection_factory" class="%mop_arangodb.connection_factory.class%">
         </service>
-        <service id="mop_avocado.connection" class="stdClass" factory-service="mop_avocado.connection_factory" factory-method="createConnection" abstract="true" />
+        <service id="mop_arangodb.connection" class="stdClass" factory-service="mop_arangodb.connection_factory" factory-method="createConnection" abstract="true" />
     </services>
 </container>

@@ -4,11 +4,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <parameters>
-        <parameter key="mop_avocado.data_collector.class">Mop\AvocadoBundle\DataCollector</parameter>
+        <parameter key="mop_arangodb.data_collector.class">Mop\ArangoDbBundle\DataCollector</parameter>
     </parameters>
     <services>
-        <service id="mop_avocado.data_collector" class="%mop_avocado.data_collector.class%">
-            <tag name="data_collector" template="MopAvocadoBundle:DataCollector:avocado" id="avocado" />
+        <service id="mop_arangodb.data_collector" class="%mop_arangodb.data_collector.class%">
+            <tag name="data_collector" template="MopArangoDbBundle:DataCollector:arangodb" id="arangodb" />
         </service>
     </services>
 </container>
