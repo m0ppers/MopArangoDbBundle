@@ -1,28 +1,27 @@
-# MopAvocadoBundle
+# MopArangoDbBundle
 
-This is a simple integration of AvocadoDB (http://avocadodb.org) into Symfony2
+This is a simple integration of ArangoDb (http://arangodb.org) into Symfony2
 
 ## Status
 
-This is HIGHLY experimental as is AvocadoDB itself and its somewhat hackish xD
+This is HIGHLY experimental as is ArangoDb itself and its somewhat hackish xD
 
 ## What does the integration do?
 
 This bundle handles several things:
 
-1. It makes avocado connections configurable in symfony
+1. It makes arangodb connections configurable in symfony
 2. It provides a neat DataCollector so you will see what's happening in the symfony profiler
 3. It comes with a FOSUser integration (which should be in a separate bundle but whatever)
-4. Some commands to handle creating and dropping collections (Couldn't figure out how to do that with avocsh)
 
 ## Installation
 
 It's a normal symfony bundle so installation should be straight forward. However there is no composer integration yet
 due to its experimental status.
 
-You will need the AvocadoDB-PHP lib as well (easily installable through composer):
+You will need the ArangoDb-PHP lib as well (easily installable through composer):
 
-https://github.com/triAGENS/AvocadoDB-PHP
+https://github.com/triAGENS/ArangoDb-PHP
 
 ## Basic Configuration
 
@@ -57,13 +56,15 @@ mop_arangodb:
         connection: main
         collection: users
 ```
-Afterwards create the collection in arangodb
+Afterwards create the collection in arangodb.
 
-## Avocado Helper Commands
-
-Currently there are two helper commands available through the symfony console:
+Then you will have to tell fos that it should use the arangodb driver:
 
 ```
-avocado:create-collection
-avocado:drop-collection
+fos_user:
+    db_driver: custom
+    user_class: Acme\DemoBundle\Entity\User
+    firewall_name: main
+    service:
+        user_manager: mop_arangodb.fos.user_manager
 ```
