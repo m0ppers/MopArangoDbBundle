@@ -7,6 +7,12 @@
             "email": "andreas.streichardt@gmail.com"
         }
     ],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "autoload": {
+        "psr-0": { "Mop\\ArangoDbBundle": "" }
+    },
+    "target-dir": "Mop/ArangoDbBundle",
     "require": {
         "triagens/ArangoDb": "dev-master",
         "symfony/framework-bundle": "2.1.x"
