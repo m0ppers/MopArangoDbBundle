@@ -1,0 +1,15 @@
+{
+    "name": "mop/arangodbbundle",
+    "description": "Symfony2 integration for ArangoDB",
+    "authors": [
+        {
+            "name": "Andreas Streichardt",
+            "email": "andreas.streichardt@gmail.com"
+        }
+    ],
+    "require": {
+        "triagens/ArangoDb": "dev-master",
+        "symfony/framework-bundle": "2.1.x"
+
+    }
+}
