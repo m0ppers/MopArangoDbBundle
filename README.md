@@ -16,10 +16,32 @@ This bundle handles several things:
 
 ## Installation
 
-It's a normal symfony bundle so installation should be straight forward. However there is no composer integration yet
-due to its experimental status.
+It's a normal symfony bundle so installation should be straight forward. There is no composer integration via packagist yet
+due to its experimental status. You can install the bundle via composer easily nevertheless:
 
-You will need the ArangoDb-PHP lib as well (easily installable through composer):
+Step 1: Register this github repository in the repositories section of your composer.json
+```
+"repositories": [
+        ...
+        {
+               "type":"vcs",
+               "url":"https://github.com/m0ppers/MopArangoDbBundle.git"
+        }
+		...
+   ],
+```
+
+Step 2: This bundle needs ArangoDB-PHP. Add both bundles to your composer.json:
+```
+ "require": {
+	    ..
+	    "mop/arangodbbundle" : "dev-master",
+		"triagens/ArangoDb": "1.2.*",
+		..
+	}
+```
+
+ArangoDb-PHP comes with lots of documentation & examples. Check it out here:
 
 https://github.com/triAGENS/ArangoDb-PHP
 
