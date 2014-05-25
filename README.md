@@ -36,7 +36,7 @@ Step 2: This bundle needs ArangoDB-PHP. Add both bundles to your composer.json:
  "require": {
 	    ..
 	    "mop/arangodbbundle" : "dev-master",
-		"triagens/ArangoDb": "1.2.*",
+		"triagens/ArangoDb": "2.0.*",
 		..
 	}
 ```
