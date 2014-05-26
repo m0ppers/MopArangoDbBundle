@@ -14,7 +14,7 @@
     },
     "target-dir": "Mop/ArangoDbBundle",
     "require": {
-        "triagens/ArangoDb": "1.2.*",
-        "symfony/framework-bundle": ">=2.1.0,<2.3-dev"
+        "triagens/ArangoDb": ">=2.0.0",
+        "symfony/framework-bundle": ">=2.1.0,<=2.4"
     }
 }
