@@ -48,7 +48,10 @@ class MopArangoDbExtension extends Extension
         }
 
 
-        $container->setAlias('mop_arangodb.default_connection', 'mop_arangodb.connections.'.$config['default_connection']);
+        if ($config['default_connection']) {
+            $container->setAlias('mop_arangodb.default_connection', 'mop_arangodb.connections.'.$config['default_connection']);
+        }
+
         if (isset($config['fos'])) {
             $container->setParameter('mop_arangodb.fos.collection', $config['fos']['collection']);
             $container->setAlias('mop_arangodb.fos.connection', 'mop_arangodb.connections.'.$config['fos']['connection']);
