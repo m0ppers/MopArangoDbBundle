@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <parameters>
-        <parameter key="mop_arangodb.data_collector.class">Mop\ArangoDbBundle\DataCollector</parameter>
+        <parameter key="mop_arangodb.data_collector.class">Mop\ArangoDbBundle\DataCollector\DataCollector</parameter>
     </parameters>
     <services>
         <service id="mop_arangodb.data_collector" class="%mop_arangodb.data_collector.class%">

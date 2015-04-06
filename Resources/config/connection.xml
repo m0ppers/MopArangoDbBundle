@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-
 <container xmlns="http://symfony.com/schema/dic/services"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
@@ -9,8 +8,14 @@
     </parameters>
 
     <services>
-        <service id="mop_arangodb.connection_factory" class="%mop_arangodb.connection_factory.class%">
-        </service>
-        <service id="mop_arangodb.connection" class="stdClass" factory-service="mop_arangodb.connection_factory" factory-method="createConnection" abstract="true" />
+        <service
+            id="mop_arangodb.connection_factory"
+            class="%mop_arangodb.connection_factory.class%"/>
+        <service
+            id="mop_arangodb.connection"
+            class="stdClass"
+            factory-service="mop_arangodb.connection_factory"
+            factory-method="createConnection"
+            abstract="true" />
     </services>
 </container>
