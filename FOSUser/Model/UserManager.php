@@ -1,25 +1,48 @@
 <?php
 namespace Mop\ArangoDbBundle\FOSUser\Model;
 
-use FOS\UserBundle\Model\UserManager as BaseUserManager;
 use FOS\UserBundle\Model\UserInterface;
-use Symfony\Component\Validator\Constraint;
-use triagens\ArangoDb\Connection;
-use triagens\ArangoDb\DocumentHandler;
-use triagens\ArangoDb\Document;
+use FOS\UserBundle\Model\UserManager as BaseUserManager;
 use FOS\UserBundle\Util\CanonicalizerInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Mop\ArangoDbBundle\FOSUser\User;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Validator\Constraint;
+use triagens\ArangoDb\CollectionHandler;
+use triagens\ArangoDb\Connection;
+use triagens\ArangoDb\Document;
+use triagens\ArangoDb\DocumentHandler;
+use triagens\ArangoDb\Statement;
 
 class UserManager extends BaseUserManager
 {
+    /**
+     * @var Connection
+     */
     protected $connection;
+
+    /**
+     * @var string
+     */
     protected $class;
+
+    /**
+     * @var DocumentHandler
+     */
     protected $documentHandler;
+
+    /**
+     * @var string
+     */
     protected $collection;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory, CanonicalizerInterface $usernameCanonicalizer, CanonicalizerInterface $emailCanonicalizer, Connection $connection, $collection, $class)
-    {
+    public function __construct(
+        EncoderFactoryInterface $encoderFactory,
+        CanonicalizerInterface $usernameCanonicalizer,
+        CanonicalizerInterface $emailCanonicalizer,
+        Connection $connection,
+        $collection,
+        $class
+    ) {
         $this->connection = $connection;
         $this->collection = $collection;
         $this->documentHandler = new DocumentHandler($this->connection);
@@ -27,29 +50,71 @@ class UserManager extends BaseUserManager
         parent::__construct($encoderFactory, $usernameCanonicalizer, $emailCanonicalizer);
     }
 
+    /**
+     * @return array
+     * @throws \triagens\ArangoDb\ClientException
+     * @author Mario Mueller
+     */
     public function findUsers()
     {
-        throw new \InvalidArgumentException('Not implemented');
+        $aql = "FOR u in {$this->collection} RETURN u";
+        $statement = new Statement(
+            $this->connection, array(
+            "query" => $aql,
+            "batchSize" => 1000,
+            "sanitize" => true,
+        )
+        );
+
+        $values = $statement->execute()->getAll();
+        $result = array();
+        $cls = $this->getClass();
+        foreach ($values as $user) {
+            /* @var $user Document */
+            $targetModel = new $cls;
+            /* @var $targetModel User */
+            $result[] = $this->fromDocument($targetModel, $user);
+        }
+
+        return $result;
     }
 
+    /**
+     * @param array $criteria
+     *
+     * @return array
+     * @throws \triagens\ArangoDb\ClientException
+     */
     private function findUsersBy(array $criteria)
     {
         $result = array();
         $class = $this->getClass();
-        foreach ($this->documentHandler->getByExample($this->collection, $criteria) as $document) {
+        $collectionHandler = new CollectionHandler($this->connection);
+        foreach ($collectionHandler->byExample($this->collection, $criteria) as $document) {
+            /* @var $document Document */
             $user = new $class;
-            $this->fromDocument($user, $document);
-            $result[] = $user;
+            $result[] = $this->fromDocument($user, $document);
         }
         return $result;
     }
 
-    function deleteUser(UserInterface $user)
+    /**
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
+    public function deleteUser(UserInterface $user)
     {
-        return $this->documentHandler->delete($this->collection, $user->getId());
+        return $this->documentHandler->removeById($this->collection, $user->getId());
     }
 
-    function findUserBy(array $criteria)
+    /**
+     * @param array $criteria
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function findUserBy(array $criteria)
     {
         $users = $this->findUsersBy($criteria);
         if (count($users) == 0) {
@@ -58,6 +123,13 @@ class UserManager extends BaseUserManager
         return $users[0];
     }
 
+    /**
+     * @param UserInterface $user
+     * @param Document      $document
+     *
+     * @return UserInterface
+     * @author Mario Mueller
+     */
     private function fromDocument(UserInterface $user, Document $document)
     {
         if (!$user instanceof User) {
@@ -68,69 +140,98 @@ class UserManager extends BaseUserManager
         return $user;
     }
 
-    function getClass()
+    /**
+     * @return string
+     */
+    public function getClass()
     {
         return $this->class;
     }
-    
-    function reloadUser(UserInterface $user)
+
+    /**
+     * @param UserInterface $user
+     */
+    public function reloadUser(UserInterface $user)
     {
         $document = $this->documentHandler->get($this->collection, $user->getId());
         $this->fromDocument($user, $document);
     }
 
-    function updateUser(UserInterface $user)
+    /**
+     * @param UserInterface $user
+     *
+     * @throws \Exception
+     * @throws \triagens\ArangoDb\ClientException
+     */
+    public function updateUser(UserInterface $user)
     {
+        /* @var $user User */
         $this->updateCanonicalFields($user);
         $this->updatePassword($user);
-        
+
         $id = $user->getId();
         $data = $user->toArray();
 
-        $document = new Document;
-        
+        $document = new Document();
+
         foreach ($data as $k => $v) {
             if (isset($v)) {
                 if (is_object($v)) {
                     if ($v instanceof \DateTime) {
                         $v = $v->getTimestamp();
+                        $document->$k = $v;
                     } else {
-                        throw new \Exception('Can\'t handle '.get_class($v));
+                        throw new \Exception('Can\'t handle ' . get_class($v));
                     }
                 } else {
                     $document->$k = $v;
                 }
             }
         }
-        
-        if ($id) {
+
+        if (!empty($id)) {
             $this->documentHandler->updateById($this->collection, $id, $document);
         } else {
-            $id = $this->documentHandler->add($this->collection, $document);
+            $id = $this->documentHandler->save($this->collection, $document);
             $user->setId($id);
         }
     }
-    
-    function validateUnique(UserInterface $value, Constraint $constraint)
+
+    /**
+     * @param UserInterface $value
+     * @param Constraint    $constraint
+     *
+     * @return bool
+     */
+    public function validateUnique(UserInterface $value, Constraint $constraint)
     {
+        /* @var $value User */
         $this->updateCanonicalFields($value);
-        $fields = array_map('trim', explode(',', $constraint->property));
-        
-        $criteria = array();
-        foreach ($fields as $field) {
-            $criteria[$field] = call_user_func_array(array($value, 'get'.ucfirst($field)), array());
+
+        $dataArray = $constraint->getTargets();
+
+        if (!is_array($constraint->getTargets())) {
+            $dataArray = explode(',', $constraint->getTargets());
         }
-        
+
+        $fields = array_map('trim', $dataArray);
+        $criteria = array();
+
+        $valueData = $value->toArray();
+        foreach ($fields as $field) {
+            $criteria[$field] = $valueData[$field];
+        }
+
         $users = $this->findUsersBy($criteria);
-        if (count($users) == 0) {
+        if (count($users) === 0) {
             return true;
         }
 
         foreach ($users as $user) {
             if ($value->isUser($user)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
