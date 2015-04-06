@@ -1,20 +1,24 @@
 {
-    "name": "mop/arangodbbundle",
-    "description": "Symfony2 integration for ArangoDB",
-    "authors": [
-        {
-            "name": "Andreas Streichardt",
-            "email": "andreas.streichardt@gmail.com"
-        }
-    ],
-    "type": "symfony-bundle",
-    "license": "MIT",
-    "autoload": {
-        "psr-0": { "Mop\\ArangoDbBundle": "" }
-    },
-    "target-dir": "Mop/ArangoDbBundle",
-    "require": {
-        "triagens/ArangoDb": ">=2.0.0",
-        "symfony/framework-bundle": ">=2.1.0,<=2.7"
+  "name": "mop/arangodbbundle",
+  "description": "Symfony2 integration for ArangoDB",
+  "authors": [
+    {
+      "name": "Andreas Streichardt",
+      "email": "andreas.streichardt@gmail.com"
     }
+  ],
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "autoload": {
+    "psr-0": {"Mop\\ArangoDbBundle": ""}
+  },
+  "target-dir": "Mop/ArangoDbBundle",
+  "require": {
+    "triagens/ArangoDb": ">=2.0.0",
+    "symfony/framework-bundle": ">=2.1.0,<=2.7"
+  },
+  "require-dev": {
+    "friendsofsymfony/user-bundle": "~1.3.0",
+    "symfony/validator" : ">=2.1.0,<=2.7"
+  }
 }
