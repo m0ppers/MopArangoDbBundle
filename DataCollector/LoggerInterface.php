@@ -1,5 +1,5 @@
 <?php
-namespace Mop\ArangoDbBundle;
+namespace Mop\ArangoDbBundle\DataCollector;
 
 interface LoggerInterface
 {
