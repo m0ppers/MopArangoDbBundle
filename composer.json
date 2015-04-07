@@ -5,6 +5,10 @@
     {
       "name": "Andreas Streichardt",
       "email": "andreas.streichardt@gmail.com"
+    },
+    {
+      "name": "Mario Mueller",
+      "email": "mario@xenji.com"
     }
   ],
   "type": "symfony-bundle",
