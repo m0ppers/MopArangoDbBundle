@@ -16,17 +16,11 @@ class Factory
     private $loggers = array();
 
     /**
-     * @var bool
-     */
-    private $hasLogger = false;
-
-    /**
      * @param LoggerInterface $logger
      */
     public function addLogger(LoggerInterface $logger)
     {
         $this->loggers[] = $logger;
-        $this->hasLogger = true;
     }
 
     /**
@@ -43,7 +37,7 @@ class Factory
             'port' => $port
         );
 
-        if ($this->hasLogger === true) {
+        if (count($this->loggers) > 0) {
             $loggers = $this->loggers;
             $trace = function ($type, $data) use ($name, $loggers) {
                 foreach ($loggers as $logger) {
