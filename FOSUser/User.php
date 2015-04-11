@@ -21,7 +21,7 @@ abstract class User extends BaseUser
         'passwordRequestedAt',
         'roles',
         'credentialsExpired',
-        'credentialsExpiredAt',
+        'credentialsExpireAt',
     );
 
     /**
