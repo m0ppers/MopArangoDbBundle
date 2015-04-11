@@ -73,7 +73,7 @@ $connection = $container->get('mop_arangodb.connections.main');
 ### FOS Userbundle integration
 
 ```
-mop_arangodb:
+mop_arango_db:
     fos:
         connection: main
         collection: users
