@@ -116,6 +116,14 @@ class UserManager extends BaseUserManager
      */
     public function findUserBy(array $criteria)
     {
+        if (count($criteria) == 1 && array_key_exists('id', $criteria)) {
+            $class = $this->getClass();
+            /* @var $document Document */
+            $user = new $class;
+            $documentHandler = new DocumentHandler($this->connection);
+            $arangoDocument = $documentHandler->get($this->collection, $criteria['id']);
+            return $this->fromDocument($user, $arangoDocument);
+        }
         $users = $this->findUsersBy($criteria);
         if (count($users) == 0) {
             throw new \Exception('User not found');
