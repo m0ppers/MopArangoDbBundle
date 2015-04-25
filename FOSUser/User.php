@@ -57,8 +57,8 @@ abstract class User extends BaseUser
      */
     public function fromArray(array $data)
     {
-        foreach ($this->getFields() as $field) {
-            $this->{$field} = $data[$field];
+        foreach (array_intersect_key($data, $this->getFields()) as $key => $value) {
+            $this->{$key} = $data[$value];
         }
     }
 
