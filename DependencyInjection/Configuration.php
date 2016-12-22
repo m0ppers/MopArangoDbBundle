@@ -31,7 +31,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('port')->defaultValue(8529)->end()
                             ->scalarNode('database')->defaultValue('_system')->end()
                             ->scalarNode('user')->defaultValue('root')->end()
-                            ->scalarNode('port')->defaultValue('password')->end()
+                            ->scalarNode('password')->defaultValue('password')->end()
                         ->end()
                     ->end()
                 ->end()
