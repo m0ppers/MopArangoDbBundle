@@ -25,6 +25,7 @@ class Factory
         $options = array(
             ConnectionOptions::OPTION_ENDPOINT => sprintf('tcp://%s:%d', $host, $port),
             ConnectionOptions::OPTION_DATABASE => $databaseName,
+            ConnectionOptions::OPTION_AUTH_TYPE => 'Basic',
             ConnectionOptions::OPTION_AUTH_USER => $user,
             ConnectionOptions::OPTION_AUTH_PASSWD => $password,
         );
