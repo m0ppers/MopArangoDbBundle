@@ -2,6 +2,7 @@
 namespace Mop\ArangoDbBundle\Connection;
 
 use Mop\ArangoDbBundle\LoggerInterface;
+use triagens\ArangoDb\ConnectionOptions;
 use triagens\ArangoDb\Connection;
 
 class Factory
@@ -13,9 +14,22 @@ class Factory
         $this->loggers[] = $logger;
     }
 
-    public function createConnection($name, $host, $port)
-    {
-        $options = array('host' => $host, 'port' => $port);
+    public function createConnection(
+        $name,
+        $host,
+        $port = 8529,
+        $databaseName = '_system',
+        $user = 'root',
+        $password = ''
+    ) {
+        $options = array(
+            ConnectionOptions::OPTION_HOST => $host,
+            ConnectionOptions::OPTION_PORT => $port,
+            ConnectionOptions::OPTION_DATABASE => $databaseName,
+            ConnectionOptions::OPTION_AUTH_USER => $user,
+            ConnectionOptions::OPTION_AUTH_PASSWD => $password,
+        );
+
         if (count($this->loggers)) {
             $loggers = $this->loggers;
             $trace = function($type, $data) use($name, $loggers) {
