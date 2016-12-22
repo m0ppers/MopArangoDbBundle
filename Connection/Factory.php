@@ -23,8 +23,7 @@ class Factory
         $password = ''
     ) {
         $options = array(
-            ConnectionOptions::OPTION_HOST => $host,
-            ConnectionOptions::OPTION_PORT => $port,
+            ConnectionOptions::OPTION_ENDPOINT => sprintf('tcp://%s:%d', $host, $port),
             ConnectionOptions::OPTION_DATABASE => $databaseName,
             ConnectionOptions::OPTION_AUTH_USER => $user,
             ConnectionOptions::OPTION_AUTH_PASSWD => $password,
