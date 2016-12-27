@@ -9,8 +9,9 @@
     </parameters>
 
     <services>
-        <service id="mop_arangodb.connection_factory" class="%mop_arangodb.connection_factory.class%">
+        <service id="mop_arangodb.connection_factory" class="%mop_arangodb.connection_factory.class%"/>
+        <service id="mop_arangodb.connection" class="stdClass" abstract="true">
+            <factory service="mop_arangodb.connection_factory" method="createConnection" />
         </service>
-        <service id="mop_arangodb.connection" class="stdClass" factory-service="mop_arangodb.connection_factory" factory-method="createConnection" abstract="true" />
     </services>
 </container>
