@@ -1,9 +1,9 @@
 <?php
 namespace Mop\ArangoDbBundle\Connection;
 
+use ArangoDBClient\Connection;
+use ArangoDBClient\ConnectionOptions;
 use Mop\ArangoDbBundle\LoggerInterface;
-use triagens\ArangoDb\ConnectionOptions;
-use triagens\ArangoDb\Connection;
 
 class Factory
 {
