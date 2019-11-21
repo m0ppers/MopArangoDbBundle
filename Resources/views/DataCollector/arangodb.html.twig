@@ -12,7 +12,7 @@
         </div>
         <div class="sf-toolbar-info-piece">
             <b>Request time</b>
-            <span>{{ '%0.2f'|format(collector.totaltime) }} ms</span>
+            <span>{{ '%0.2f'|format(collector.totaltime * 1000) }} ms</span>
         </div>
     {% endset %}
     {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
@@ -24,7 +24,7 @@
     <strong>ArangoDb</strong>
     <span class="count">
         <span>{{ collector.interactionscount }}</span>
-        <span>{{ '%0.0f'|format(collector.totaltime) }} ms</span>
+        <span>{{ '%0.0f'|format(collector.totaltime * 1000) }} ms</span>
     </span>
 </span>
 {% endblock %}

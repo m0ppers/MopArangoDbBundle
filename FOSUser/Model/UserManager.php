@@ -1,15 +1,15 @@
 <?php
 namespace Mop\ArangoDbBundle\FOSUser\Model;
 
-use FOS\UserBundle\Model\UserManager as BaseUserManager;
+use ArangoDBClient\Connection;
+use ArangoDBClient\Document;
+use ArangoDBClient\DocumentHandler;
 use FOS\UserBundle\Model\UserInterface;
-use Symfony\Component\Validator\Constraint;
-use triagens\ArangoDb\Connection;
-use triagens\ArangoDb\DocumentHandler;
-use triagens\ArangoDb\Document;
+use FOS\UserBundle\Model\UserManager as BaseUserManager;
 use FOS\UserBundle\Util\CanonicalizerInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Mop\ArangoDbBundle\FOSUser\User;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Validator\Constraint;
 
 class UserManager extends BaseUserManager
 {
@@ -72,7 +72,7 @@ class UserManager extends BaseUserManager
     {
         return $this->class;
     }
-    
+
     function reloadUser(UserInterface $user)
     {
         $document = $this->documentHandler->get($this->collection, $user->getId());
@@ -83,12 +83,12 @@ class UserManager extends BaseUserManager
     {
         $this->updateCanonicalFields($user);
         $this->updatePassword($user);
-        
+
         $id = $user->getId();
         $data = $user->toArray();
 
         $document = new Document;
-        
+
         foreach ($data as $k => $v) {
             if (isset($v)) {
                 if (is_object($v)) {
@@ -102,7 +102,7 @@ class UserManager extends BaseUserManager
                 }
             }
         }
-        
+
         if ($id) {
             $this->documentHandler->updateById($this->collection, $id, $document);
         } else {
@@ -110,17 +110,17 @@ class UserManager extends BaseUserManager
             $user->setId($id);
         }
     }
-    
+
     function validateUnique(UserInterface $value, Constraint $constraint)
     {
         $this->updateCanonicalFields($value);
         $fields = array_map('trim', explode(',', $constraint->property));
-        
+
         $criteria = array();
         foreach ($fields as $field) {
             $criteria[$field] = call_user_func_array(array($value, 'get'.ucfirst($field)), array());
         }
-        
+
         $users = $this->findUsersBy($criteria);
         if (count($users) == 0) {
             return true;
